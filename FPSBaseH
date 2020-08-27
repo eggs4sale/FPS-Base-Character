@@ -1,0 +1,68 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Character.h"
+#include "MainCharacter.generated.h"
+
+class USkeletalMeshComponent;
+class USpringArmComponent;
+class UCameraComponent;
+class USoundBase;
+class UStaticMeshComponent;
+
+UCLASS()
+class REALBULLETS_API AMainCharacter : public ACharacter
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FirstPersonCameraComponent;
+
+public:
+	// Sets default values for this character's propertieshttps://docs.unrealengine.com/en-US/API/Runtime/Engine/Components/USceneComponent/GetRightVector/index.html
+	AMainCharacter();
+
+	UPROPERTY(VisibleAnywhere, Category = "Mesh")
+	USkeletalMeshComponent* Mesh1P;
+
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	USkeletalMeshComponent* FP_Gun;
+
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	USceneComponent* FP_MuzzleLocation;
+	// SceneComponent basically represents a specific location in space (More specfically this scene component represents the end of the barrel of the gun)
+
+
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	USoundBase* FireSound;
+
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	UAnimMontage* FireAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector GunOffset;
+
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+	
+	void OnFire();
+	void EndFire();
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	uint32 GunRange;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+};
